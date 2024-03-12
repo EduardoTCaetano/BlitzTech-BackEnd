@@ -1,1 +1,1 @@
-* Back-Endo do projeto BlitzTech
+* Back-End do projeto BlitzTech
