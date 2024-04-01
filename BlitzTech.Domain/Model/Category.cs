@@ -10,17 +10,23 @@ namespace BlitzTech.Model
 
         public Category(string description, bool isActive)
         {
+            ValidateDescription(description);
+
             Description = description;
             IsActive = isActive;
         }
-        public void ValidateDomain(string description)
+        public void ValidateDescription(string description)
         {
             DomainExceptionValidations.ExceptionHandler(string.IsNullOrEmpty(description),
-            "Invalid Description. Description is required!");
+           "Invalid Description. Description is required!");
         }
-        public Category(string description)
+     
+        public void ValidateActive(string isActive)
         {
-            ValidateDomain(description);
+            DomainExceptionValidations.ExceptionHandler(bool.Parse(isActive),
+            "Invalid Active. IsActive is required!");
         }
+
+        
     }
 }

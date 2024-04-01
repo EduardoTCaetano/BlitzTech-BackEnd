@@ -5,8 +5,11 @@ namespace BlitzTech.Domain.Interfaces
 {
     public interface ICategoryRepository
     {
-        Task<IEnumerable<Category>> GetAllCategoriesasnyc();
-        Task<Category> GetByIdasync(Guid id);
-        Task<Category> Addasync(Category category);
+        Task<IEnumerable<Category>> GetAllCategoriesAsync();
+        Task<Category> GetByIdAsync(Guid id);
+        Task<Category> AddAsync(Category category);
+        Task<Category> UpdateAsync(Category category);
+        Task<Category> DeleteAsync(Guid id);
+        Task<Category> InactiveAsync(Guid id);
     }
 }
