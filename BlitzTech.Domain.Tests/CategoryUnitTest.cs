@@ -3,7 +3,6 @@ using BlitzTech.Model;
 using FluentAssertions;
 
 namespace BlitzTech.Domain.Tests
-
 {
     public class CategoryUnitTest
     {

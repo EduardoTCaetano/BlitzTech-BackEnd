@@ -11,27 +11,28 @@ namespace BlitzTech.Model
         public int Stock { get; set; }
         public string Image { get; set; }
         public bool IsActive { get; set; } = true;
-        public Category CategoryId { get; set; }
+        // public Category CategoryId { get; set; }
 
-        public Product(string name, string description, decimal price, int stock, string image, Category categoryId)
+        public Product(string name, string description, decimal price, int stock, string image) //Category categoryId
         {
-            ValidateAndSetValues(name, description, price, stock, image, categoryId);
+            ValidateAndSetValues(name, description, price, stock, image); //categoryId
         }
-        private void ValidateAndSetValues(string name, string description, decimal price, int stock, string image, Category categoryId)
+
+        private void ValidateAndSetValues(string name, string description, decimal price, int stock, string image) //Category categoryId
         {
             ValidateName(name);
             ValidateDescription(description);
             ValidatePrice(price);
             ValidateStock(stock);
             ValidateImage(image);
-            ValidateCategoryId(categoryId);
+            // ValidateCategoryId(categoryId);
 
             Name = name;
             Description = description;
             Price = price;
             Stock = stock;
             Image = image;
-            CategoryId = categoryId;
+            // CategoryId = categoryId;
         }
         private void ValidateName(string name)
         {
@@ -44,7 +45,7 @@ namespace BlitzTech.Model
         {
             if (string.IsNullOrEmpty(description))
                 DomainExceptionValidations.ExceptionHandler(true, "Invalid description. Description is required!");
-            if (description.Length > 500)
+            if (description.Length>30)
                 DomainExceptionValidations.ExceptionHandler(true, "Too long description.");
         }
         private void ValidatePrice(decimal price)
@@ -59,9 +60,9 @@ namespace BlitzTech.Model
         {
             DomainExceptionValidations.ExceptionHandler(string.IsNullOrEmpty(image), "Invalid Image. Image is required!");
         }
-        private void ValidateCategoryId(Category categoryId)
-        {
-            DomainExceptionValidations.ExceptionHandler(categoryId == null, "Invalid Category. Category is required!");
-        }
+        // private void ValidateCategoryId(Category categoryId)
+        // {
+        //     DomainExceptionValidations.ExceptionHandler(categoryId == null, "Invalid Category. Category is required!");
+        // }
     }
 }

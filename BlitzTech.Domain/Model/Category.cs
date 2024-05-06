@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using BlitzTech.Domain.Entities;
 using BlitzTech.Domain.Validations;
 
@@ -20,13 +21,11 @@ namespace BlitzTech.Model
             DomainExceptionValidations.ExceptionHandler(string.IsNullOrEmpty(description),
            "Invalid Description. Description is required!");
         }
-     
+
         public void ValidateActive(string isActive)
         {
             DomainExceptionValidations.ExceptionHandler(bool.Parse(isActive),
             "Invalid Active. IsActive is required!");
         }
-
-        
     }
 }
