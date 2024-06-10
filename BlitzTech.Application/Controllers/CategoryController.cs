@@ -1,5 +1,7 @@
 using BlitzTech.Data.Context;
+using BlitzTech.Data.Mapping;
 using BlitzTech.Data.Migrations;
+using BlitzTech.Domain.Dtos.Category;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlitzTech.Application.Controllers
@@ -17,7 +19,8 @@ namespace BlitzTech.Application.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var category = _context.Categories.ToList();
+            var category = _context.Categories.ToList()
+            .Select(s => s.ToCategoryDto());
             return Ok(category);
         }
 
@@ -34,5 +37,13 @@ namespace BlitzTech.Application.Controllers
             return Ok(category);
         }
 
+        [HttpPost]
+        public IActionResult Add([FromBody] CreateCategoryRequestDto categoryDto)
+        {
+            var category = categoryDto.ToCategoryFromCreateDTO();
+            _context.Categories.Add(category);
+            _context.SaveChanges();
+            return CreatedAtAction(nameof(GetById), new { id = category.Id }, AutoMapperProfiles.ToCategoryDto(category));
+        }
     }
 }
