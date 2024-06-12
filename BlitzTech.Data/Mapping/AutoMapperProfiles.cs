@@ -8,6 +8,7 @@ namespace BlitzTech.Data.Mapping
         public static CategoryDto ToCategoryDto(this Category category)
         {
             return new CategoryDto(
+                category.Id,
                 category.Description,
                 category.IsActive
             );
@@ -17,6 +18,7 @@ namespace BlitzTech.Data.Mapping
         {
             return new Category
             (
+                categoryDto.Id,
                 categoryDto.Description,
                 categoryDto.IsActive
             );

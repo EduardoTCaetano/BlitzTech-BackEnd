@@ -3,6 +3,7 @@ using BlitzTech.Data.Mapping;
 using BlitzTech.Data.Migrations;
 using BlitzTech.Domain.Dtos.Category;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BlitzTech.Application.Controllers
 {
@@ -19,31 +20,64 @@ namespace BlitzTech.Application.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var category = _context.Categories.ToList()
+            var categoryModel = _context.Categories.ToList()
             .Select(s => s.ToCategoryDto());
-            return Ok(category);
+            return Ok(categoryModel);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:guid}")]
         public IActionResult GetById([FromRoute] Guid id)
         {
-            var category = _context.Categories.Find(id);
+            var categoryModel = _context.Categories.Find(id);
 
-            if (category == null)
+            if (categoryModel == null)
             {
                 return NotFound("Nada encontrado :( ");
             }
 
-            return Ok(category);
+            return Ok(categoryModel);
         }
 
         [HttpPost]
-        public IActionResult Add([FromBody] CreateCategoryRequestDto categoryDto)
+        public IActionResult Post([FromBody] CreateCategoryRequestDto categoryDto)
         {
-            var category = categoryDto.ToCategoryFromCreateDTO();
-            _context.Categories.Add(category);
+            var categoryModel = categoryDto.ToCategoryFromCreateDTO();
+            _context.Categories.Add(categoryModel);
             _context.SaveChanges();
-            return CreatedAtAction(nameof(GetById), new { id = category.Id }, AutoMapperProfiles.ToCategoryDto(category));
+            return CreatedAtAction(nameof(GetById), new { id = categoryModel.Id }, AutoMapperProfiles.ToCategoryDto(categoryModel));
+        }
+
+        [HttpPut("{id:guid}")]
+        public IActionResult Update([FromRoute] Guid id, [FromBody] UpdateCategoryRequestDto updateDto)
+        {
+            var categoryModel = _context.Categories.FirstOrDefault(x => x.Id == id);
+
+            if (categoryModel == null)
+            {
+                return NotFound("Id não encontrado :( ");
+            }
+
+            // Update the properties
+            categoryModel.Description = updateDto.Description;
+            categoryModel.IsActive = updateDto.IsActive;
+
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!_context.Categories.Any(e => e.Id == id))
+                {
+                    return NotFound("Id não encontrado :( ");
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return Ok(categoryModel.ToCategoryDto());
         }
     }
 }

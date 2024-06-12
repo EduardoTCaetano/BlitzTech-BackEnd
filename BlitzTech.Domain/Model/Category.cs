@@ -5,13 +5,14 @@ namespace BlitzTech.Model
 {
     public class Category : EntityBase
     {
-        public string Description { get; private set; } // Modificado para público
+        public string Description { get;  set; } 
         public bool IsActive { get; set; }
 
-        public Category(string description, bool isActive)
+        public Category(Guid id, string description, bool isActive)
         {
             ValidateDescription(description);
 
+            Id = id;
             Description = description;
             IsActive = isActive;
         }
