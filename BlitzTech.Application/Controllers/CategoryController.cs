@@ -3,6 +3,7 @@ using BlitzTech.Data.Mapping;
 using BlitzTech.Data.Migrations;
 using BlitzTech.Domain.Dtos.Category;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BlitzTech.Application.Controllers
 {
@@ -17,17 +18,18 @@ namespace BlitzTech.Application.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var categoryModel = _context.Categories.ToList()
-            .Select(s => s.ToCategoryDto());
+            var categoryModel = await _context.Categories.ToListAsync();
+
+            var categoryDto =  categoryModel.Select(s => s.ToCategoryDto());
             return Ok(categoryModel);
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetById([FromRoute] Guid id)
+        public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
-            var categoryModel = _context.Categories.Find(id);
+            var categoryModel = _context.Categories.FindAsync(id);
 
             if (categoryModel == null)
             {
@@ -38,19 +40,19 @@ namespace BlitzTech.Application.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] CreateCategoryRequestDto categoryDto)
+        public async Task<IActionResult> Post([FromBody] CreateCategoryRequestDto categoryDto)
         {
             var categoryModel = categoryDto.ToCategoryFromCreateDTO();
-            _context.Categories.Add(categoryModel);
-            _context.SaveChanges();
+            await _context.Categories.AddAsync(categoryModel);
+            await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetById), new { id = categoryModel.Id }, AutoMapperProfiles.ToCategoryDto(categoryModel));
         }
 
         [HttpPut]
         [Route("{id}")]
-        public IActionResult Update([FromRoute] Guid id, [FromBody] UpdateCategoryRequestDto updateDto)
+        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateCategoryRequestDto updateDto)
         {
-            var categoryModel = _context.Categories.FirstOrDefault(x => x.Id == id);
+            var categoryModel = await _context.Categories.FirstOrDefaultAsync(x => x.Id == id);
 
             if (categoryModel == null)
             {
@@ -59,15 +61,15 @@ namespace BlitzTech.Application.Controllers
             categoryModel.Description = updateDto.Description;
             categoryModel.IsActive = updateDto.IsActive;
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return Ok(categoryModel.ToCategoryDto());
         }
 
         [HttpDelete]
         [Route("{id}")]
-        public IActionResult Delete([FromRoute] Guid id)
+        public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
-            var categoryModel = _context.Categories.FirstOrDefault(x => x.Id == id);
+            var categoryModel = await _context.Categories.FirstOrDefaultAsync(x => x.Id == id);
 
             if (categoryModel == null)
             {
@@ -75,7 +77,7 @@ namespace BlitzTech.Application.Controllers
             }
 
             _context.Categories.Remove(categoryModel);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return NoContent();
         }
 
