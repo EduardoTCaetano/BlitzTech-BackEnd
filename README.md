@@ -12,7 +12,7 @@ Technologies Used
 •	JWT
 
 Usage Instructions
-1.	Clone the repository: git clone https://github.com/your-username/BlitzTech.git
+1.	Clone the repository: git clone https://github.com/EduardoTCaetano/BlitzTech.git
 2.	Navigate to the project directory: cd BlitzTech
 3.	Restore the packages: dotnet restore
 4.	Run the application: dotnet run
